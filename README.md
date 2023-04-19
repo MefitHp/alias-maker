@@ -27,8 +27,6 @@ source ~/.zshrc
 
 The Alias Maker plugin provides the following subcommands:
 
-shCopy code
-
 ```
 amc <alias_name> <alias_command>  # Create a new custom zsh alias
 amd <alias_name>                  # Delete an existing custom zsh alias
@@ -68,7 +66,7 @@ am --list
 Example output:
 
 ```
-Custom aliases found in /Users/yourUser/.zshrc:
+Custom aliases found in /Users/YOUR_USER/.zshrc:
 alias zshconfig="mate ~/.zshrc"
 alias ohmyzsh="mate ~/.oh-my-zsh"
 ```
