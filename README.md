@@ -13,6 +13,14 @@ git clone https://github.com/MefitHp/alias-maker.git ~/.oh-my-zsh/custom/plugins
 
 2.  Then, add `alias_maker` to your Zsh plugins list in your `.zshrc` file:
 
+If using you're using VSCode you can open the file with the following command:
+
+```zsh
+code ~/.zshrc
+```
+
+Then just update the plugins
+
 ```zsh
 plugins=(...other plugis, alias_maker)
 ```
