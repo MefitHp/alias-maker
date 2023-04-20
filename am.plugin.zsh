@@ -40,11 +40,12 @@ function amc() {
 
     # Validate the input to prevent arbitrary command execution
     if [[ $alias_name == *[';\`$']* || $alias_command == *[';\`$']* ]]; then
-    echo "Error: Invalid input provided" >&2
-    return 1
+        echo "Error: Invalid input provided" >&2
+        return 1
     fi
 
     # Create the new alias
+    echo "alias $alias_name=\"$alias_command\"" >> ~/.zshrc
     alias $alias_name="$alias_command"
 
     # Output the success message
