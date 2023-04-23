@@ -13,11 +13,11 @@ function am() {
             echo "  amc <alias_name> <alias_command>: Create a new custom zsh alias"
             echo "  amd <alias_name>: Delete an existing custom zsh alias"
             echo "  -h, --help: Show this help message"
-            echo "  --l, --list: List all custom zsh aliases defined in your .zshrc file"
+            echo "  -l, --list: List all custom zsh aliases defined in your .zshrc file"
             return 0
             ;;
         create_alias)
-            amc "$2" "$3"
+            amc "$2"
             ;;
         delete_alias)
             amd "$2"
@@ -26,7 +26,7 @@ function am() {
             alias_maker_list_aliases
             ;;
         *)
-            echo "Error: Invalid subcommand '$subcommand'. Use 'alias_maker -h' for help." >&2
+            echo "Error: Invalid subcommand '$subcommand'. Use 'am -h' for help." >&2
             return 1
             ;;
     esac
@@ -44,9 +44,9 @@ function amc() {
         return 1
     fi
 
-    # Create the new alias
+    # Create the new alias and save it to the .zshrc file
     echo "alias $alias_name=\"$alias_command\"" >> ~/.zshrc
-    alias $alias_name="$alias_command"
+    source ~/.zshrc
 
     # Output the success message
     echo "Alias created:"
@@ -55,13 +55,19 @@ function amc() {
 
 # Define a function to delete an existing zsh alias
 function amd() {
-    # Get the name of the alias to delete
-    local alias_name=$1
-
-    # Delete the alias
-    unalias $alias_name
-
-    echo "Alias deleted successfully"
+  local alias_name=$1
+  # Check if the alias exists
+  if ! grep -q "alias ${alias_name}=" ~/.zshrc; then
+    echo "Alias '${alias_name}' does not exist."
+    return 1
+  fi
+  # Delete the alias from .zshrc
+  sed -i.bak "/alias ${alias_name}=/d" ~/.zshrc
+  # Remove backup file
+  rm ~/.zshrc.bak
+  # Unset the alias
+  unalias $alias_name
+  echo "Alias '${alias_name}' has been deleted."
 }
 
 # Define a function to list all custom zsh aliases
