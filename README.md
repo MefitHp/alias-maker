@@ -22,7 +22,7 @@ code ~/.zshrc
 Then just update the plugins
 
 ```zsh
-plugins=(...other plugis, alias-maker)
+plugins=(plugin1 plugin2 alias-maker)
 ```
 
 3.  Restart your zsh shell or update the shell.
