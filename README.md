@@ -8,10 +8,10 @@ command line.
 1.  Clone the Alias Maker repository:
 
 ```
-git clone https://github.com/MefitHp/alias-maker.git ~/.oh-my-zsh/custom/plugins/alias_maker
+git clone https://github.com/MefitHp/alias-maker.git ~/.oh-my-zsh/custom/plugins/alias-maker
 ```
 
-2.  Then, add `alias_maker` to your Zsh plugins list in your `.zshrc` file:
+2.  Then, add `alias-maker` to your Zsh plugins list in your `.zshrc` file:
 
 If using you're using VSCode you can open the file with the following command:
 
@@ -22,7 +22,7 @@ code ~/.zshrc
 Then just update the plugins
 
 ```zsh
-plugins=(...other plugis, alias_maker)
+plugins=(...other plugis, alias-maker)
 ```
 
 3.  Restart your zsh shell or update the shell.
