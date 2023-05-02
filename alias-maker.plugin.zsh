@@ -1,16 +1,16 @@
 # Define the plugin name and version
-alias_maker_version="1.0.0"
-alias_maker_name="alias-maker"
+declare -r alias_maker_version="1.0.0"
+declare -r alias_maker_name="alias-maker"
 
 # Check if Oh My Zsh is installed
-if [ -z "$ZSH" ]; then
+if [[ -z "$ZSH" ]]; then
     echo "Error: Oh My Zsh is not installed on your system. Please install it before using the $alias_maker_name plugin."
     echo "You can download Oh My Zsh from https://ohmyz.sh"
     return 1
 fi
 
 # Check if .zshrc file exists
-if [ ! -f "$HOME/.zshrc" ]; then
+if [[ ! -f "$HOME/.zshrc" ]]; then
     echo "Creating .zshrc file..."
     touch "$HOME/.zshrc"
 fi
@@ -44,13 +44,18 @@ function am() {
 # Define a function to create a new zsh alias
 # Function create_alias
 function amc() {
-    # Get the name and command for the new alias
-    local alias_name=$1
-    local alias_command=$2
+    local -r alias_name="$1"
+    local -r alias_command="$2"
 
-    # Validate the input to prevent arbitrary command execution
+    # Check if the alias name or command is empty or contains invalid commands
     if [[ $alias_name == *[';\`$']* || $alias_command == *[';\`$']* ]]; then
         echo "Error: Invalid input provided" >&2
+        return 1
+    fi
+
+    # Check if the alias already exists
+    if alias "$alias_name" >/dev/null 2>&1; then
+        echo "Error: Alias '$alias_name' already exists." >&2
         return 1
     fi
 
@@ -67,7 +72,7 @@ function amc() {
 # Args:
 # $1: Alias name
 function amd() {
-    local alias_name=$1
+    local -r alias_name=$1
 
     # Check if the alias exists
     if ! alias | grep -q "$alias_name="; then
@@ -86,21 +91,32 @@ function amd() {
 
 # Define a function to list all custom zsh aliases
 function list_aliases() {
-    # Read the contents of the .zshrc file
+    local -a aliases=()
     local rc_file="$HOME/.zshrc"
-    local file_contents="$(cat $rc_file)"
+    # Check if .zshrc file exists
+    if [ ! -f "$rc_file" ]; then
+        echo "No .zshrc file found." >&2
+        return 1
+    fi
 
-    # Search for lines starting with the "alias" keyword
-    local aliases="$(echo "$file_contents" | grep "^alias ")"
+    # Read the .zshrc file and find all aliases
+    while read -r line; do
+        if [[ $line == alias* ]]; then
+            aliases+=("$line")
+        fi
+    done <"$rc_file"
 
-    # Output the aliases found in a list-like format
-    if [[ -n $aliases ]]; then
+    # Check if any aliases were found
+    if [ ${#aliases[@]} -gt 0 ]; then
         echo "🔧 Custom aliases found in $HOME/.zshrc:"
         echo ""
-        # Loop through each alias and print its name and command
-        grep -oE "^alias [a-zA-Z0-9_-]+=.+$" "$HOME/.zshrc" | sed -E 's/^alias ([a-zA-Z0-9_-]+)=(.+)$/  - \1 → \2/' | sed 's/"//g' | awk '{print "  " $0}'
 
-        echo ""
+        for alias in "${aliases[@]}"; do
+            name="${alias%%=*}"
+            command="${alias#*=}"
+            name="${name#alias }"
+            echo "  - $name → ${command//\'/}"
+        done
     else
         echo "No custom aliases found in $rc_file"
     fi
