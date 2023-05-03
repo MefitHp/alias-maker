@@ -74,7 +74,7 @@ am --list
 Example output:
 
 ```
-Custom aliases found in /Users/YOUR_USER/.zshrc:
-alias zshconfig="mate ~/.zshrc"
-alias ohmyzsh="mate ~/.oh-my-zsh"
+🔧 Custom aliases found in /Users/YOUR_USER/.zshrc:
+    - zshconfig → "mate ~/.zshrc"
+    - ohmyzsh →"mate ~/.oh-my-zsh"
 ```
